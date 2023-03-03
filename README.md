@@ -6,7 +6,7 @@ Predicts nuclear and cell envelope reporters from transmitted light images. This
 ## Table of contents
 * [System requirements](#system-requirements)
 * [Installation](#installation)
-* [Training a neural network for nucleus prediction or cell membrane prediction](#training-a-neural-network-for-nucleus-prediction-or-cell-membrane prediction)
+* [Training a neural network for nucleus prediction or cell membrane prediction](#training-a-neural-network-for-nucleus-prediction-or-cell-membrane-prediction)
 * [Predicting nucleus images or cell membrane images](#predicting-nucleus-images-or-cell-membrane-images)
 * [Training a neural network for position detection](#training-a-neural-network-for-position-detection)
 * [Predicting positions](#predicting-positions)
