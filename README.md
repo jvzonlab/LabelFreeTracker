@@ -3,6 +3,16 @@ Predicts nuclear and cell envelope reporters from transmitted light images. This
 
 ![Method overview](https://user-images.githubusercontent.com/1462188/222784969-bc1b02a0-a0a3-459c-92c9-10b9cc5e16a4.png)
 
+## Table of contents
+* [System requirements](#system-requirements)
+* [Installation](#installation)
+* [Training a neural network for nucleus prediction or cell membrane prediction](#training-a-neural-network-for-nucleus-prediction-or-cell-membrane prediction)
+* [Predicting nucleus images or cell membrane images](#predicting-nucleus-images-or-cell-membrane-images)
+* [Training a neural network for position detection](#training-a-neural-network-for-position-detection)
+* [Predicting positions](#predicting-positions)
+* [Predicting links over time](#predicting-links-over-time)
+* [Tracking cells over time](#tracking-cells-over-time)
+
 ## System requirements
 Installation was tested on Microsoft Windows only. We're using a CUDA-compartible graphics card with 10 GB of VRAM, but you can likely get it to work too with weaker specs.
 
@@ -24,7 +34,7 @@ For installation, please follow the following steps:
   ![New menu options](https://user-images.githubusercontent.com/1462188/222797841-2730abd9-0af1-485e-975d-089559a4ff87.png)
 
 
-## Training a neural network for nucleus or cell membrane prediction
+## Training a neural network for nucleus prediction or cell membrane prediction
 In this section, we are going to train a neural network to predict nuclei from transmitted light images. For this, we need a dataset of fluorescent nucleus images with accompanying transmitted light images. For this training process, you will need organoids with fluorescent nuclei. After the training is complete, you can use the network on organoids without a nuclear reporter.
 
 To make sure that you can follow our instructions, we are going to use [this example dataset](https://zenodo.org/record/7197573) from an earlier paper from our lab. If you have managed to train the network successfully on our data, you can add your images to the mix, or even train the network exclusively on your images. Note that it helps training if you make your images as oversaturated as our images, i.e. almost the entire nucleus is fully white. This is because then the neural network doesn't need to learn to predict the fluorescent intensity, but just whether there's nucleus at the location.
@@ -76,7 +86,7 @@ leak_empty_fraction = 0.05
 
 Now start the training process by running `train_cell_painting.bat` again. Within an hour or so, training should be done. You'll get an output folder with example images showing how the results of the network improved (or not) after each trianing epoch.
 
-## Predicting nucleus or cell membrane images
+## Predicting nucleus images or cell membrane images
 
 
 
