@@ -37,6 +37,8 @@ For installation, please follow the following steps:
 ## Training a neural network for nucleus prediction or cell membrane prediction
 In this section, we are going to train a neural network to predict nuclei from transmitted light images. For this, we need a dataset of fluorescent nucleus images with accompanying transmitted light images. For this training process, you will need organoids with fluorescent nuclei. After the training is complete, you can use the network on organoids without a nuclear reporter.
 
+The procedure for training cell membrane images is identical, except that you need to provide fluorescent membrane images instead of nucleus images. Therefore, we will not discuss training the network to draw membranes.
+
 To make sure that you can follow our instructions, we are going to use [this example dataset](https://zenodo.org/record/7197573) from an earlier paper from our lab. If you have managed to train the network successfully on our data, you can add your images to the mix, or even train the network exclusively on your images. Note that it helps training if you make your images as oversaturated as our images, i.e. almost the entire nucleus is fully white. This is because then the neural network doesn't need to learn to predict the fluorescent intensity, but just whether there's nucleus at the location.
 
 Download the example dataset, and open each time lapse in OrganoidTracker. You load each time lapse separately in another tab. The buttons for loading images and opening tabs are shown here:
@@ -87,15 +89,44 @@ leak_empty_fraction = 0.05
 Now start the training process by running `train_cell_painting.bat` again. Within an hour or so, training should be done. You'll get an output folder with example images showing how the results of the network improved (or not) after each trianing epoch.
 
 ## Predicting nucleus images or cell membrane images
+Once you've got a trained network, you can use it as follows. First, open the time lapse of transmitted light images that you want to use in OrganoidTracker. *Make sure you are on the transmitted light channel, and not any other channel that you might have imaged.* Then, use `Tools` -> `From transmitted light` -> `Predict cell painting`:
 
+![Starting cell painting](https://user-images.githubusercontent.com/1462188/222900652-3f7ea7dc-678a-48e1-a8f0-8b5c5ef82251.png)
+
+LabelFreeTracker will then ask you two questions: where you have stored the trained model (it will be in a folder named `saved_model`, that can be found in the output files from the training procedure), and in which folder you want to save the painted images. Then, open that folder (LabelFreeTracker will show a button to open it for you), and run the `predict_cell_painting.bat` script:
+
+![Running cell painting](https://user-images.githubusercontent.com/1462188/222900814-108a0191-54ee-4eb4-912d-3ddc4692c69d.png)
+
+After the script is finished, all output images will be placed in a subfolder. You can load these images in OrganoidTracker, which allows you to manually track the cells.
 
 
 ## Training a neural network for position detection
+If you have obtained nucleus images from the above steps, you can in principle track the cells manually in OrganoidTracker. However, depending on your usecase it might be better to automate this step.
 
+In this section, we are going to train a neural network to directly tell us where the cell centers (or actually: nucleus centers) are, based on transmitted light images. The required training data consists of transmitted light images with corresponding nucleus center positions. To obtain this data, a good strategy would be to use organoids with a fluorescent nucleus reporter, and detect the nucleus center positions using a program like [CellPose](https://www.cellpose.org/), as CellPose works well enough for most datasets even without retraining. (Note that CellPose gives you the full segmentation of the nucleus. We will only use the center position.) 
 
+Alternatively, if you want to set up full cell tracking instead of just nucleus center position detection, it is better to already bite the bullet, and create a dataset of manual tracking data using for example OrganoidTracker. This will later on allow you to evaluate the performance of your cell tracking.
+
+In this example, we are going to simply use the pre-existing tracking data, so that you can follow along. Load all images as shown in the [fluorescence prediction section](#training-a-neural-network-for-nucleus-prediction-or-cell-membrane-prediction). Next, also load all OrganoidTracker tracking files from the same dataset. Make sure that you have all orgaonids loaded in OrganoidTracker, one organoid per tab.
+
+![Loading tracking data](https://user-images.githubusercontent.com/1462188/222903440-9d0b9317-e5f8-4732-b2c8-2f70719923f6.png)
+
+Then, switch to the `<all experiments>` tab and use `Tools` -> `From transmitted light` -> `Train nucleus center prediction`. Save the folder somewhere, and open it. The folder should look like this:
+
+![Training folder](https://user-images.githubusercontent.com/1462188/222903568-cb5fefbd-3fcd-4524-aee2-f5e56a685fcf.png)
+
+Then, run the `train_nucleus_centers_from_transmitted_light.bat` script by double-clicking it. It will modify the `organoid_tracker.ini` file to place the default settings in it. Open that file, and check whether the settings are corerct. I changed the number of epochs to 4, and verified that the transmitted light channel was indeed channel 2. If you run out of GPU memory during training, you can reduce the `patch_size_zyx` to `128,128,16`.
+
+Now run the `train_nucleus_centers_from_transmitted_light.bat` script again, and the training will start. This might take several hours. You will get an output folder with example images of how the training improved over time.
 
 ## Predicting positions
+Once you've got a trained network, you can use it as follows. First, open the time lapse of transmitted light images that you want to use in OrganoidTracker. *Make sure you are on the transmitted light channel, and not any other channel that you might have imaged.* Then, use `Tools` -> `From transmitted light` -> `Predict nucleus center positions...`:
 
+LabelFreeTracker will then ask you two questions: where you have stored the trained model (it will be in a folder named `saved_model`, that can be found in the output files from the training procedure), and in which folder you want to save the detected ositions. Then, open that folder (LabelFreeTracker will show a button to open it for you), and run the `predict_cell_painting.bat` script:
+
+![Running position prediction](https://user-images.githubusercontent.com/1462188/222904633-c65a86be-f39a-42ba-b90f-983f81870295.png)
+
+After the script is finished, you'll get an OrganoidTracker output file. If you want to process this file yourself, it's a [JSON file](https://www.w3schools.com/python/python_json.asp), and it should be easy to parse using any JSON parser.
 
 ## Predicting links over time
 
