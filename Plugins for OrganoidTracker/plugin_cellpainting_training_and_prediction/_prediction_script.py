@@ -69,7 +69,8 @@ def predict(args: List[str]) -> int:
             output_image = output_image * 255
             numpy.clip(output_image, 0, 255, out=output_image)
             output_image = output_image.astype(numpy.uint8)
-            tifffile.imwrite(os.path.join(output_folder, f"cell_painting_t{time_point.time_point_number():03}.tif"), output_image, compress=9)
+            tifffile.imwrite(os.path.join(output_folder, f"cell_painting_t{time_point.time_point_number():03}.tif"), output_image, 
+                             compression=tifffile.COMPRESSION.ADOBE_DEFLATE, compressionargs={"level": 9})
 
     print("Done!")
     return 0
