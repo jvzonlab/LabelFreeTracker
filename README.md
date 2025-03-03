@@ -12,7 +12,7 @@ Predicts nuclear and cell envelope reporters from transmitted light images. This
 * [Predicting positions](#predicting-positions)
 * [Predicting links over time](#predicting-links-over-time)
 * [Tracking cells over time](#tracking-cells-over-time)
-* [Segmentating cells](#segmenting-cells)
+* [Segmenting cells](#segmenting-cells)
 
 ## System requirements
 Installation was tested on Microsoft Windows only. We're using a CUDA-compartible graphics card with 10 GB of VRAM, but you can likely get it to work too with weaker specs.
